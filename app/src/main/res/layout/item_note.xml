@@ -18,7 +18,7 @@
             android:layout_margin="@dimen/titleNoteMargin" />
 
         <TextView
-            android:id="@+id/note"
+            android:id="@+id/body"
             style="@style/TextAppearance.AppCompat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
