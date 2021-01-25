@@ -1,21 +1,27 @@
 package ru.geekbrains.easynotes.model
 
-import android.graphics.Color
-import org.apache.commons.lang3.StringUtils
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.util.*
 
-class Note(title: String, body: String, color: Int = Color.WHITE) {
-    val title: String
-    val body: String
-    val color: Int
+@Parcelize
+data class Note(
+    val id: String,
+    val title: String,
+    val body: String,
+    val color: Color = Color.WHITE,
+    val lastChanged: Date = Date()
+) : Parcelable {
 
-    init {
-        if (StringUtils.isNotEmpty(title)) {
-            this.title = title
-        } else {
-            this.title = "New note"
-        }
-        this.body = body
-        this.color = color
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Note
+        if (id != other.id) return false
+        return true
     }
 
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }

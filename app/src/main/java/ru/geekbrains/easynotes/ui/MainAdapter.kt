@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ItemNoteBinding
 import ru.geekbrains.easynotes.model.Note
+import ru.geekbrains.easynotes.model.getColorInt
 
-class MainAdapter : RecyclerView.Adapter<MainAdapter.NoteViewHolder>() {
+class MainAdapter(private val onItemClickListener: OnItemClickListener) :
+    RecyclerView.Adapter<MainAdapter.NoteViewHolder>() {
 
     var notes: List<Note> = listOf()
         set(value) {
@@ -27,13 +29,19 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.NoteViewHolder>() {
 
     override fun getItemCount(): Int = notes.size
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ui: ItemNoteBinding = ItemNoteBinding.bind(itemView)
 
         fun bind(note: Note) {
             ui.title.text = note.title
             ui.body.text = note.body
-            itemView.setBackgroundColor(note.color)
+            ui.body.setBackgroundResource(getColorInt(note.color))
+            itemView.setBackgroundColor(getColorInt(note.color))
+            itemView.setOnClickListener { onItemClickListener.onItemClick(note) }
         }
     }
+}
+
+interface OnItemClickListener {
+    fun onItemClick(note: Note)
 }

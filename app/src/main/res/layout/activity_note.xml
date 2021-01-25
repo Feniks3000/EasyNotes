@@ -20,31 +20,30 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:orientation="vertical"
+        android:padding="@dimen/noteActivityLinearPadding"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Header"
             android:textColorHint="@android:color/black">
 
-            <TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
-        </TextInputLayout>
+                android:textColor="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <EditText
             android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@null"
-            android:hint="Текст заметки"/>
+            android:layout_marginTop="@dimen/noteBodyMarginTop"
+            android:background="@null" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
