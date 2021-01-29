@@ -10,32 +10,34 @@ import android.text.TextWatcher
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import ru.geekbrains.easynotes.databinding.ActivityMainBinding
 import ru.geekbrains.easynotes.databinding.ActivityNoteBinding
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.model.getColorInt
+import ru.geekbrains.easynotes.viewmodel.MainViewModel
 import ru.geekbrains.easynotes.viewmodel.NoteViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 private val SAVE_DELAY = 2000L
 
-class NoteActivity : AppCompatActivity() {
+class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
 
-        fun getStartIntent(context: Context, note: Note?): Intent {
+        fun getStartIntent(context: Context, noteId: String?): Intent {
             val intent = Intent(context, NoteActivity::class.java)
-            intent.putExtra(EXTRA_NOTE, note)
+            intent.putExtra(EXTRA_NOTE, noteId)
             return intent
         }
 
     }
 
     private var note: Note? = null
-    private lateinit var ui: ActivityNoteBinding
-    private lateinit var viewModel: NoteViewModel
+    override val ui: ActivityNoteBinding by lazy { ActivityNoteBinding.inflate(layoutInflater) }
+    override val viewModel: NoteViewModel by lazy { ViewModelProvider(this).get(NoteViewModel::class.java) }
     private val textChangeListener = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             triggerSaveNote()
@@ -50,12 +52,8 @@ class NoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = ActivityNoteBinding.inflate(layoutInflater)
-        setContentView(ui.root)
 
-        viewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
-
-        note = intent.getParcelableExtra(EXTRA_NOTE)
+        val noteId = intent.getStringExtra(EXTRA_NOTE)
 
         setSupportActionBar(ui.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -63,6 +61,10 @@ class NoteActivity : AppCompatActivity() {
             SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(note!!.lastChanged)
         } else {
             SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(Date())
+        }
+
+        noteId?.let {
+            viewModel.loadNote(noteId)
         }
 
         initView()
@@ -107,4 +109,9 @@ class NoteActivity : AppCompatActivity() {
             ui.title.text.toString(),
             ui.body.text.toString()
         )
+
+    override fun renderData(data: Note?) {
+        this.note = data
+        initView()
+    }
 }

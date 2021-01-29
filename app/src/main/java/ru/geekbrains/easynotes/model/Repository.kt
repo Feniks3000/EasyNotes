@@ -1,5 +1,7 @@
 package ru.geekbrains.easynotes.model
 
+import java.util.*
+
 object Repository {
 
     private val remoteDataProvider: RemoteDataProvider = FirebaseStoreProvider()
@@ -9,4 +11,6 @@ object Repository {
     fun saveNote(note: Note) = remoteDataProvider.saveNote(note)
 
     fun getNoteById(id: String) = remoteDataProvider.getNoteById(id)
+
+    fun getNewId() = UUID.randomUUID().toString()
 }
