@@ -3,7 +3,8 @@ package ru.geekbrains.easynotes.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 
 private const val NOTES_COLLECTION = "notes"
 
@@ -18,20 +19,17 @@ class FirebaseStoreProvider : RemoteDataProvider {
     override fun subscribeToAllNotes(): LiveData<NoteResult> {
         val result = MutableLiveData<NoteResult>()
 
-        notesReference.addSnapshotListener(object : EventListener<QuerySnapshot> {
-            override fun onEvent(snapshot: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                if (error != null) {
-                    result.value = NoteResult.Error(error)
-                } else if (snapshot != null) {
-                    val notes = mutableListOf<Note>()
-                    for (doc: QueryDocumentSnapshot in snapshot) {
-                        notes.add(doc.toObject(Note::class.java))
-                    }
-                    result.value = NoteResult.Success(notes)
+        notesReference.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                result.value = NoteResult.Error(error)
+            } else if (snapshot != null) {
+                val notes = mutableListOf<Note>()
+                for (doc: QueryDocumentSnapshot in snapshot) {
+                    notes.add(doc.toObject(Note::class.java))
                 }
+                result.value = NoteResult.Success(notes)
             }
-
-        })
+        }
 
         return result
     }
