@@ -71,7 +71,7 @@ class NoteActivity : AppCompatActivity() {
     private fun initView() {
         ui.title.setText(note?.title ?: "")
         ui.body.setText(note?.body ?: "")
-        ui.toolbar.setBackgroundResource(getColorInt(if (note != null) note!!.color else null))
+        ui.toolbar.setBackgroundResource(getColorInt(note?.color))
 
         ui.title.addTextChangedListener(textChangeListener)
         ui.body.addTextChangedListener(textChangeListener)
