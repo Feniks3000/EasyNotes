@@ -30,9 +30,8 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
         }
     }
 
-    private fun openNoteScreen(note: Note?) {
+    private fun openNoteScreen(note: Note?) =
         startActivity(NoteActivity.getStartIntent(this, note?.id))
-    }
 
     override fun renderData(data: List<Note>?) {
         if (data == null) return

@@ -25,13 +25,11 @@ abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
         })
     }
 
-    protected fun renderError(error: Throwable) {
-        if (error.message != null) showError(error.message!!)
-    }
+    protected fun renderError(error: Throwable) = error.message?.let { showError(error.message!!) }
 
     abstract fun renderData(data: T)
 
-    protected fun showError(error: String) {
+    fun showError(error: String) {
         val snackbar = Snackbar.make(ui.root, error, Snackbar.LENGTH_INDEFINITE)
         // TODO: Нужно инициировать дейтсвие?
         snackbar.show()
