@@ -1,9 +1,16 @@
-package ru.geekbrains.easynotes.model
+package ru.geekbrains.easynotes.ui
 
 import ru.geekbrains.easynotes.R
+import ru.geekbrains.easynotes.model.Color
+import java.text.SimpleDateFormat
+import java.util.*
 
-fun getColorInt(color: Color? = Color.WHITE): Int =
-    when (color) {
+const val DATE_TIME_FORMAT = "dd.MMM.yy HH:mm"
+
+fun Date.format(): String = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(this)
+
+fun Color.getColorInt(): Int =
+    when (this) {
         Color.WHITE -> R.color.color_white
         Color.VIOLET -> R.color.color_violet
         Color.YELLOW -> R.color.color_yellow
