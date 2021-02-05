@@ -13,4 +13,6 @@ object Repository {
     fun getNoteById(id: String) = remoteDataProvider.getNoteById(id)
 
     fun getNewId() = UUID.randomUUID().toString()
+
+    fun getCurrentUser() = remoteDataProvider.getCurrenUser()
 }
