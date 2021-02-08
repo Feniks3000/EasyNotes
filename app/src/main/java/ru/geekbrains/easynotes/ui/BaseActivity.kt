@@ -24,11 +24,11 @@ abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
         }
     }
 
-    protected fun renderError(error: Throwable) = error.message?.let { showError(it) }
+    protected open fun renderError(error: Throwable) = error.message?.let { showError(it) }
 
     abstract fun renderData(data: T)
 
-    fun showError(error: String) {
+    protected open fun showError(error: String) {
         Snackbar.make(ui.root, error, Snackbar.LENGTH_INDEFINITE).apply {
             setAction(R.string.snackbar_action) { dismiss() }
             show()
