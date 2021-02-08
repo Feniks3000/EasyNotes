@@ -2,17 +2,6 @@ package ru.geekbrains.easynotes.model
 
 import ru.geekbrains.easynotes.R
 
-enum class Color {
-    WHITE,
-    YELLOW,
-    GREEN,
-    BLUE,
-    RED,
-    VIOLET,
-    PINK,
-    GRAY
-}
-
 fun getColorInt(color: Color? = Color.WHITE): Int =
     when (color) {
         Color.WHITE -> R.color.color_white

@@ -3,4 +3,7 @@
     <dimen name="cardViewNoteMargin">5dp</dimen>
     <dimen name="titleNoteMargin">8dp</dimen>
     <dimen name="noteNoteMargin">8dp</dimen>
+    <dimen name="floatButtonMargin">16dp</dimen>
+    <dimen name="noteBodyMarginTop">16dp</dimen>
+    <dimen name="noteActivityLinearPadding">16dp</dimen>
 </resources>
