@@ -22,7 +22,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
 
-        fun getStartIntent(context: Context, noteId: String?): Intent =
+        fun getStartIntent(context: Context, noteId: String?) =
             Intent(context, NoteActivity::class.java).apply {
                 putExtra(EXTRA_NOTE, noteId)
             }
