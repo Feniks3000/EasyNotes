@@ -36,7 +36,6 @@ class MainAdapter(private val onItemClickListener: OnItemClickListener) :
                 ui.title.text = title
                 ui.body.text = body
                 ui.noteCard.setCardBackgroundColor(color.getColorInt(itemView.context))
-                ui.body.setBackgroundColor(color.getColorInt(itemView.context))
             }
             itemView.setOnClickListener { onItemClickListener.onItemClick(note) }
         }
