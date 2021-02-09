@@ -10,12 +10,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityNoteBinding
 import ru.geekbrains.easynotes.model.Color
 import ru.geekbrains.easynotes.model.Note
-import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.viewmodel.NoteViewModel
 import java.util.*
 
@@ -35,7 +34,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     private var note: Note? = null
     private var color: Color = Color.WHITE
     override val ui: ActivityNoteBinding by lazy { ActivityNoteBinding.inflate(layoutInflater) }
-    override val viewModel: NoteViewModel by lazy { ViewModelProvider(this).get(NoteViewModel::class.java) }
+    override val viewModel: NoteViewModel by viewModel()
     private val textChangeListener = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             triggerSaveNote()
@@ -143,7 +142,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     private fun createNewNote(): Note =
         Note(
-            Repository.getNewId(),
+            UUID.randomUUID().toString(),
             ui.title.text.toString(),
             ui.body.text.toString()
         )

@@ -7,7 +7,7 @@ import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.ui.NoteViewState
 
-class NoteViewModel(val repository: Repository = Repository) :
+class NoteViewModel(val repository: Repository) :
     BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     private var currentNote: Note? = null

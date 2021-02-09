@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityMainBinding
 import ru.geekbrains.easynotes.model.Note
@@ -18,7 +18,7 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
     private val CLASS = "${MainActivity::class.java.simpleName}"
 
     override val ui: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    override val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    override val viewModel: MainViewModel by viewModel()
 
     lateinit var adapter: MainAdapter
 

@@ -6,7 +6,7 @@ import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.ui.MainViewState
 
-class MainViewModel(repository: Repository = Repository) :
+class MainViewModel(repository: Repository) :
     BaseViewModel<List<Note>?, MainViewState>() {
 
     private val repositoryNotes = repository.getNotes()

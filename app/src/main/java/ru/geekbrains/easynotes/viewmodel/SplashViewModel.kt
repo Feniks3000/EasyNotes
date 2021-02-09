@@ -4,7 +4,7 @@ import ru.geekbrains.easynotes.exceptions.NoAuthException
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.ui.SplashViewState
 
-class SplashViewModel(private val repository: Repository = Repository) :
+class SplashViewModel(private val repository: Repository) :
     BaseViewModel<Boolean?, SplashViewState>() {
 
     fun requestUser() {
