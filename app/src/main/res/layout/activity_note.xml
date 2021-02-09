@@ -17,6 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways" />
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <ru.geekbrains.easynotes.ui.ColorPickerView
+                android:id="@+id/colorPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize" />
+        </HorizontalScrollView>
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout

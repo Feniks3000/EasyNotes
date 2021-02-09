@@ -60,13 +60,17 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
             viewModel.loadNote(noteId)
         }
 
+        ui.colorPicker.onColorClickListener = {
+            color = it
+            setToolbarColor(it)
+            triggerSaveNote()
+        }
         setTextChangedListeners()
         //initView()
     }
 
     private fun initView() {
         note?.run {
-            ui.toolbar.setBackgroundResource(color.getColorRes())
             removeTextChangedListeners()
             if (!title.equals(ui.title.text.toString())) {
                 ui.title.setText(title)
@@ -76,7 +80,12 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
             }
             setTextChangedListeners()
             supportActionBar?.title = lastChanged.format()
+            setToolbarColor(color)
         }
+    }
+
+    private fun setToolbarColor(color: Color) {
+        ui.toolbar.setBackgroundColor(color.getColorInt(this@NoteActivity))
     }
 
     private fun setTextChangedListeners() {
@@ -91,7 +100,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> super.onBackPressed().let { true }
-        //R.id.palette -> togglePalette().let { true }
+        R.id.palette -> togglePalette().let { true }
         R.id.delete -> deleteNote().let { true }
         else -> super.onOptionsItemSelected(item)
     }
@@ -107,6 +116,13 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
             .show()
     }
 
+    private fun togglePalette() {
+        if (ui.colorPicker.isOpen) {
+            ui.colorPicker.close()
+        } else {
+            ui.colorPicker.open()
+        }
+    }
 
     private fun triggerSaveNote() {
         if (ui.title.text == null || ui.body.text == null) return
@@ -116,6 +132,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
                 note = note?.copy(
                     title = ui.title.text.toString(),
                     body = ui.body.text.toString(),
+                    color = color,
                     lastChanged = Date()
                 ) ?: createNewNote()
 
@@ -137,5 +154,13 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         this.note = data.note
         data.note?.let { color = it.color }
         initView()
+    }
+
+    override fun onBackPressed() {
+        if (ui.colorPicker.isOpen) {
+            ui.colorPicker.close()
+            return
+        }
+        super.onBackPressed()
     }
 }
