@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

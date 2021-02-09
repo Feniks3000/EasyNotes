@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.main
 
 import android.annotation.SuppressLint
 import android.content.Context

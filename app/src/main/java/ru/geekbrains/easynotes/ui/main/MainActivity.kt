@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.main
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityMainBinding
 import ru.geekbrains.easynotes.model.Note
+import ru.geekbrains.easynotes.ui.LogoutDialog
+import ru.geekbrains.easynotes.ui.base.BaseActivity
+import ru.geekbrains.easynotes.ui.note.NoteActivity
+import ru.geekbrains.easynotes.ui.splash.SplashActivity
 import ru.geekbrains.easynotes.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
@@ -38,9 +42,7 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
         })
         ui.recyclerNotes.adapter = adapter
 
-        ui.floatingAddNoteButton.setOnClickListener { view ->
-            openNoteScreen(null)
-        }
+        ui.floatingAddNoteButton.setOnClickListener { openNoteScreen(null) }
     }
 
     private fun openNoteScreen(note: Note?) =

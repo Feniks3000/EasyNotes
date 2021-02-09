@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.splash
 
 import android.app.Activity
 import android.content.Intent
@@ -9,6 +9,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivitySplashBinding
 import ru.geekbrains.easynotes.exceptions.NoAuthException
+import ru.geekbrains.easynotes.ui.main.MainActivity
+import ru.geekbrains.easynotes.ui.base.BaseActivity
 import ru.geekbrains.easynotes.viewmodel.SplashViewModel
 
 private const val RC_SIGN_IN = 460

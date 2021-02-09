@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.note
 
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
@@ -9,6 +9,8 @@ import android.widget.LinearLayout
 import androidx.annotation.Dimension
 import androidx.annotation.Dimension.DP
 import ru.geekbrains.easynotes.model.Color
+import ru.geekbrains.easynotes.ui.dip
+import ru.geekbrains.easynotes.ui.getColorRes
 
 private const val PALETTE_ANIMATION_DURATION = 150L
 private const val HEIGHT = "height"

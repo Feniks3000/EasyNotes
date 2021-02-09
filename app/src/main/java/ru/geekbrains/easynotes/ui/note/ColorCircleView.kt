@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.note
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,6 +11,7 @@ import androidx.annotation.Dimension.DP
 import androidx.annotation.Dimension.PX
 import androidx.core.content.ContextCompat
 import ru.geekbrains.easynotes.R
+import ru.geekbrains.easynotes.ui.dip
 
 @Dimension(unit = DP)
 private const val defRadiusDp = 16

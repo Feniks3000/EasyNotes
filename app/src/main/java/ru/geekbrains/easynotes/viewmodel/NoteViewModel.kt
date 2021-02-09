@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
-import ru.geekbrains.easynotes.ui.NoteViewState
+import ru.geekbrains.easynotes.ui.note.NoteViewState
 
 class NoteViewModel(val repository: Repository) :
     BaseViewModel<NoteViewState.Data, NoteViewState>() {

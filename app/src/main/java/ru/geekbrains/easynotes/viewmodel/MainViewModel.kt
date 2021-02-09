@@ -4,7 +4,7 @@ import androidx.lifecycle.Observer
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
-import ru.geekbrains.easynotes.ui.MainViewState
+import ru.geekbrains.easynotes.ui.main.MainViewState
 
 class MainViewModel(repository: Repository) :
     BaseViewModel<List<Note>?, MainViewState>() {

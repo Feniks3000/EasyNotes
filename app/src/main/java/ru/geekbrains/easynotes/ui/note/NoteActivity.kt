@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.note
 
 import android.app.AlertDialog
 import android.content.Context
@@ -15,6 +15,9 @@ import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityNoteBinding
 import ru.geekbrains.easynotes.model.Color
 import ru.geekbrains.easynotes.model.Note
+import ru.geekbrains.easynotes.ui.base.BaseActivity
+import ru.geekbrains.easynotes.ui.format
+import ru.geekbrains.easynotes.ui.getColorInt
 import ru.geekbrains.easynotes.viewmodel.NoteViewModel
 import java.util.*
 
