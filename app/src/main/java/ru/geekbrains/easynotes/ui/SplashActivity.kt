@@ -14,8 +14,8 @@ import ru.geekbrains.easynotes.exceptions.NoAuthException
 import ru.geekbrains.easynotes.model.FirebaseStoreProvider
 import ru.geekbrains.easynotes.viewmodel.SplashViewModel
 
-private const val RC_SIGN_IN = 458
-private const val START_DELAY = 2000L
+private const val RC_SIGN_IN = 460
+private const val START_DELAY = 1000L
 
 class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
 
@@ -69,7 +69,8 @@ class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
 
     private fun startMainActivity() {
         Log.d(CLASS, "startMainActivity")
-        MainActivity.getStartIntent(this)
+        startActivity(MainActivity.getStartIntent(this))
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
