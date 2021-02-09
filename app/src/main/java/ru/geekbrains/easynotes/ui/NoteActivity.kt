@@ -1,5 +1,6 @@
 package ru.geekbrains.easynotes.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +8,12 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
+import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityNoteBinding
+import ru.geekbrains.easynotes.model.Color
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.viewmodel.NoteViewModel
@@ -17,7 +21,7 @@ import java.util.*
 
 private val SAVE_DELAY = 2000L
 
-class NoteActivity : BaseActivity<Note?, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
@@ -29,6 +33,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     }
 
     private var note: Note? = null
+    private var color: Color = Color.WHITE
     override val ui: ActivityNoteBinding by lazy { ActivityNoteBinding.inflate(layoutInflater) }
     override val viewModel: NoteViewModel by lazy { ViewModelProvider(this).get(NoteViewModel::class.java) }
     private val textChangeListener = object : TextWatcher {
@@ -55,28 +60,53 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             viewModel.loadNote(noteId)
         }
 
-        initView()
+        setTextChangedListeners()
+        //initView()
     }
 
     private fun initView() {
         note?.run {
-            ui.toolbar.setBackgroundResource(color.getColorInt())
-            ui.title.setText(title)
-            ui.body.setText(body)
+            ui.toolbar.setBackgroundResource(color.getColorRes())
+            removeTextChangedListeners()
+            if (!title.equals(ui.title.text.toString())) {
+                ui.title.setText(title)
+            }
+            if (!body.equals(ui.body.text.toString())) {
+                ui.body.setText(body)
+            }
+            setTextChangedListeners()
             supportActionBar?.title = lastChanged.format()
         }
+    }
 
+    private fun setTextChangedListeners() {
         ui.title.addTextChangedListener(textChangeListener)
         ui.body.addTextChangedListener(textChangeListener)
     }
 
+    private fun removeTextChangedListeners() {
+        ui.title.removeTextChangedListener(textChangeListener)
+        ui.body.removeTextChangedListener(textChangeListener)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            onBackPressed()
-            true
-        }
+        android.R.id.home -> super.onBackPressed().let { true }
+        //R.id.palette -> togglePalette().let { true }
+        R.id.delete -> deleteNote().let { true }
         else -> super.onOptionsItemSelected(item)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean =
+        menuInflater.inflate(R.menu.menu_note, menu).let { true }
+
+    private fun deleteNote() {
+        AlertDialog.Builder(this)
+            .setMessage(R.string.delete_dialog_message)
+            .setNegativeButton(R.string.delete_dialog_cancel) { dialog, _ -> dialog.dismiss() }
+            .setPositiveButton(R.string.delete_dialog_ok) { _, _ -> viewModel.deleteNote() }
+            .show()
+    }
+
 
     private fun triggerSaveNote() {
         if (ui.title.text == null || ui.body.text == null) return
@@ -101,8 +131,11 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             ui.body.text.toString()
         )
 
-    override fun renderData(data: Note?) {
-        this.note = data
+    override fun renderData(data: NoteViewState.Data) {
+        if (data.isDeleted) finish()
+
+        this.note = data.note
+        data.note?.let { color = it.color }
         initView()
     }
 }

@@ -15,4 +15,6 @@ object Repository {
     fun getNewId() = UUID.randomUUID().toString()
 
     fun getCurrentUser() = remoteDataProvider.getCurrenUser()
+
+    fun deleteNote(id: String) = remoteDataProvider.deleteNote(id)
 }

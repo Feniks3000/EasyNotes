@@ -10,4 +10,6 @@ interface RemoteDataProvider {
     fun saveNote(note: Note): LiveData<NoteResult>
 
     fun getCurrenUser(): LiveData<User?>
+
+    fun deleteNote(id: String): LiveData<NoteResult>
 }

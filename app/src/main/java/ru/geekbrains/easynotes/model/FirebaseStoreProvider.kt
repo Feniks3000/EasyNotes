@@ -71,6 +71,19 @@ class FirebaseStoreProvider : RemoteDataProvider {
         }
     }
 
+    override fun deleteNote(id: String): LiveData<NoteResult> =
+        MutableLiveData<NoteResult>().apply {
+            try {
+                getUserNotes()
+                    .document(id)
+                    .delete()
+                    .addOnSuccessListener { value = NoteResult.Success(null) }
+                    .addOnFailureListener { throw it }
+            } catch (e: Throwable) {
+                value = NoteResult.Error(e)
+            }
+        }
+
     private fun getUserNotes() = currentUser?.let { firebaseUser ->
         db.collection(USERS_COLLECTION)
             .document(firebaseUser.uid)
