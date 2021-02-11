@@ -115,7 +115,7 @@ class FirebaseStoreProviderTest {
 
         every { mockCollection.document(testNotes[0].id) } returns mockDocumentReference
         every {
-            mockDocumentReference.set(testNotes[0]).addOnSuccessListener { capture(slot) }
+            mockDocumentReference.set(testNotes[0]).addOnSuccessListener(capture(slot))
         } returns mockk()
 
         provider.saveNote(testNotes[0]).observeForever {

@@ -54,7 +54,6 @@ class FirebaseStoreProvider(
     override fun saveNote(note: Note): LiveData<NoteResult> = MutableLiveData<NoteResult>().apply {
         try {
             Log.d(CLASS, "Save note")
-
             getUserNotes().document(note.id).set(note)
                 .addOnSuccessListener {
                     Log.d(CLASS, "Note $note is saved")
@@ -62,7 +61,7 @@ class FirebaseStoreProvider(
                 }
                 .addOnFailureListener { exception ->
                     Log.d(CLASS, "Error saving note $note, message: ${exception.message}")
-                    value = NoteResult.Error(exception)
+                    throw exception
                 }
         } catch (e: Throwable) {
             value = NoteResult.Error(e)
