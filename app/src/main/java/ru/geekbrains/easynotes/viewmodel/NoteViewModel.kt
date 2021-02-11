@@ -17,14 +17,13 @@ class NoteViewModel(val repository: Repository = Repository) :
     }
 
     override fun onCleared() {
-        if (pendingNote != null) {
-            if (StringUtils.isEmpty(pendingNote!!.title)) pendingNote =
-                pendingNote!!.copy(title = "New note")
+        pendingNote?.let {
+            if (StringUtils.isEmpty(it.title)) pendingNote = it.copy(title = "New note")
             repository.saveNote(pendingNote!!)
         }
     }
 
-    fun loadNote(id: String) {
+    fun loadNote(id: String) =
         repository.getNoteById(id).observeForever(object : Observer<NoteResult> {
             override fun onChanged(t: NoteResult?) {
                 if (t == null) return
@@ -37,5 +36,4 @@ class NoteViewModel(val repository: Repository = Repository) :
                 }
             }
         })
-    }
 }

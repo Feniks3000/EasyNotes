@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ItemNoteBinding
 import ru.geekbrains.easynotes.model.Note
-import ru.geekbrains.easynotes.model.getColorInt
 
 class MainAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<MainAdapter.NoteViewHolder>() {
@@ -18,14 +17,13 @@ class MainAdapter(private val onItemClickListener: OnItemClickListener) :
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
-        return NoteViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
+        NoteViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+        )
 
-    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) =
         holder.bind(notes[position])
-    }
 
     override fun getItemCount(): Int = notes.size
 
@@ -33,10 +31,12 @@ class MainAdapter(private val onItemClickListener: OnItemClickListener) :
         private val ui: ItemNoteBinding = ItemNoteBinding.bind(itemView)
 
         fun bind(note: Note) {
-            ui.title.text = note.title
-            ui.body.text = note.body
-            ui.body.setBackgroundResource(getColorInt(note.color))
-            itemView.setBackgroundColor(getColorInt(note.color))
+            note.run {
+                ui.title.text = title
+                ui.body.text = body
+                ui.body.setBackgroundResource(color.getColorInt())
+                itemView.setBackgroundColor(color.getColorInt())
+            }
             itemView.setOnClickListener { onItemClickListener.onItemClick(note) }
         }
     }

@@ -18,13 +18,15 @@ class FABBehavior(context: Context, attributeSet: AttributeSet) :
         target: View,
         axes: Int,
         type: Int
-    ): Boolean {
-        return axes == ViewCompat.SCROLL_AXIS_VERTICAL
-                || super.onStartNestedScroll(
-            coordinatorLayout,
-            child, directTargetChild, target, axes, type
-        )
-    }
+    ): Boolean = (axes == ViewCompat.SCROLL_AXIS_VERTICAL
+            || super.onStartNestedScroll(
+        coordinatorLayout,
+        child,
+        directTargetChild,
+        target,
+        axes,
+        type
+    ))
 
     override fun onNestedScroll(
         coordinatorLayout: CoordinatorLayout,
