@@ -53,6 +53,8 @@ class FirebaseStoreProvider(
 
     override fun saveNote(note: Note): LiveData<NoteResult> = MutableLiveData<NoteResult>().apply {
         try {
+            Log.d(CLASS, "Save note")
+
             getUserNotes().document(note.id).set(note)
                 .addOnSuccessListener {
                     Log.d(CLASS, "Note $note is saved")

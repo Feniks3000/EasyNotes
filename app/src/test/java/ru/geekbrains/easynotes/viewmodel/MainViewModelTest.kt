@@ -17,7 +17,7 @@ import ru.geekbrains.easynotes.model.Repository
 
 class MainViewModelTest {
 
-    @get:Rule
+    @get:Rule   // Правило для использования LiveData
     val taskExecuteRule = InstantTaskExecutorRule()
 
     private val mockRepository = mockk<Repository>()
