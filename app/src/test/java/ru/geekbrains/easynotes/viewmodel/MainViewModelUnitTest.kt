@@ -15,7 +15,7 @@ import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
 
-class MainViewModelTest {
+class MainViewModelUnitTest {
 
     @get:Rule   // Правило для использования LiveData
     val taskExecuteRule = InstantTaskExecutorRule()

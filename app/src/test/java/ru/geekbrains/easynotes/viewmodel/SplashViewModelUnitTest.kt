@@ -13,7 +13,7 @@ import ru.geekbrains.easynotes.exceptions.NoAuthException
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.model.User
 
-class SplashViewModelTest {
+class SplashViewModelUnitTest {
 
     @get:Rule   // Правило для использования LiveData
     val taskExecuteRule = InstantTaskExecutorRule()
