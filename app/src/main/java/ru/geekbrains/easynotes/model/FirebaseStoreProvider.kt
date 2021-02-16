@@ -19,7 +19,7 @@ class FirebaseStoreProvider(
     private val firebaseAuth: FirebaseAuth
 ) : RemoteDataProvider {
     companion object {
-        private val CLASS = "${FirebaseStoreProvider::class.java.simpleName}"
+        private val CLASS = FirebaseStoreProvider::class.java.simpleName
     }
 
     private val currentUser
@@ -76,10 +76,10 @@ class FirebaseStoreProvider(
         }
     }
 
-    override suspend fun getCurrenUser(): User = suspendCoroutine { continuation ->
+    override suspend fun getCurrenUser(): User? = suspendCoroutine { continuation ->
         currentUser?.let {
             continuation.resume(User(it.displayName ?: "", it.email ?: ""))
-        } ?: continuation.resumeWithException(NoAuthException())
+        } ?: continuation.resume(null)
     }
 
     override suspend fun deleteNote(id: String): Note? = suspendCoroutine { continuation ->
