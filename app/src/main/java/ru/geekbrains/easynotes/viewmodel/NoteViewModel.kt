@@ -1,52 +1,53 @@
 package ru.geekbrains.easynotes.viewmodel
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.Observer
+import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringUtils
 import ru.geekbrains.easynotes.model.Note
-import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
 import ru.geekbrains.easynotes.ui.note.NoteViewState
 
 class NoteViewModel(val repository: Repository) :
-    BaseViewModel<NoteViewState.Data, NoteViewState>() {
+    BaseViewModel<NoteViewState.Data>() {
 
-    private var currentNote: Note? = null
-        get() = viewStateLiveData.value?.data?.note
+    private val currentNote: Note?
+        get() = getViewState().poll()?.note
 
     fun saveChanges(note: Note) {
-        viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
+        setData(NoteViewState.Data(note = note))
+    }
+
+    fun loadNote(id: String) {
+        launch {
+            try {
+                setData(NoteViewState.Data(note = repository.getNoteById(id)))
+            } catch (e: Throwable) {
+                setError(e)
+            }
+        }
+    }
+
+    fun deleteNote() {
+        launch {
+            try {
+                currentNote?.let { repository.deleteNote(it.id) }
+                setData(NoteViewState.Data(isDeleted = true))
+            } catch (e: Throwable) {
+                setError(e)
+            }
+        }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override fun onCleared() {
-        currentNote?.let {
-            if (StringUtils.isEmpty(it.title)) currentNote = it.copy(title = "New note")
-            repository.saveNote(currentNote!!)
-        }
-    }
-
-    fun loadNote(id: String) =
-        repository.getNoteById(id).observeForever(Observer { t ->
-            t?.let { noteResult ->
-                viewStateLiveData.value = when (noteResult) {
-                    is NoteResult.Success<*> -> NoteViewState(NoteViewState.Data(note = noteResult.data as? Note))
-                    is NoteResult.Error -> NoteViewState(error = noteResult.error)
-                }
-            }
-        })
-
-    fun deleteNote() {
-        currentNote?.let {
-            repository.deleteNote(it.id).observeForever { result ->
-                result?.let { noteResult ->
-                    viewStateLiveData.value = when (noteResult) {
-                        is NoteResult.Success<*> -> NoteViewState(NoteViewState.Data(isDeleted = true))
-                        is NoteResult.Error -> NoteViewState(error = noteResult.error)
-                    }
+        launch {
+            currentNote?.let {
+                if (StringUtils.isEmpty(it.title)) {
+                    repository.saveNote(it.copy(title = "New note"))
+                } else {
+                    repository.saveNote(it)
                 }
             }
         }
-
     }
 }
