@@ -9,16 +9,16 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivitySplashBinding
 import ru.geekbrains.easynotes.exceptions.NoAuthException
-import ru.geekbrains.easynotes.ui.main.MainActivity
 import ru.geekbrains.easynotes.ui.base.BaseActivity
+import ru.geekbrains.easynotes.ui.main.MainActivity
 import ru.geekbrains.easynotes.viewmodel.SplashViewModel
 
 private const val RC_SIGN_IN = 460
 private const val START_DELAY = 1000L
 
-class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
+class SplashActivity : BaseActivity<Boolean>() {
 
-    private val CLASS = "${SplashActivity::class.java.simpleName}"
+    private val CLASS = SplashActivity::class.java.simpleName
 
     override val ui: ActivitySplashBinding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
     override val viewModel: SplashViewModel by viewModel()
@@ -28,8 +28,8 @@ class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
         Handler(Looper.getMainLooper()).postDelayed({ viewModel.requestUser() }, START_DELAY)
     }
 
-    override fun renderData(data: Boolean?) {
-        data?.takeIf { it }?.let { startMainActivity() }
+    override fun renderData(data: Boolean) {
+        if (data) startMainActivity()
     }
 
     override fun renderError(error: Throwable) = when (error) {
