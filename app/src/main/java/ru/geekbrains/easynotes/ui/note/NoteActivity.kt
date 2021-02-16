@@ -23,7 +23,7 @@ import java.util.*
 
 private val SAVE_DELAY = 2000L
 
-class NoteActivity : BaseActivity<NoteViewState.Data>() {
+class NoteActivity : BaseActivity<Data>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
@@ -150,7 +150,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data>() {
             ui.body.text.toString()
         )
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: Data) {
         if (data.isDeleted) finish()
 
         this.note = data.note
