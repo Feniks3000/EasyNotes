@@ -5,35 +5,46 @@ import org.apache.commons.lang3.StringUtils
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
-import ru.geekbrains.easynotes.ui.NoteViewState
+import ru.geekbrains.easynotes.ui.note.NoteViewState
 
-class NoteViewModel(val repository: Repository = Repository) :
-    BaseViewModel<Note?, NoteViewState>() {
+class NoteViewModel(val repository: Repository) :
+    BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
-    private var pendingNote: Note? = null
+    private var currentNote: Note? = null
+        get() = viewStateLiveData.value?.data?.note
 
     fun saveChanges(note: Note) {
-        pendingNote = note
+        viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
     }
 
     override fun onCleared() {
-        pendingNote?.let {
-            if (StringUtils.isEmpty(it.title)) pendingNote = it.copy(title = "New note")
-            repository.saveNote(pendingNote!!)
+        currentNote?.let {
+            if (StringUtils.isEmpty(it.title)) currentNote = it.copy(title = "New note")
+            repository.saveNote(currentNote!!)
         }
     }
 
     fun loadNote(id: String) =
-        repository.getNoteById(id).observeForever(object : Observer<NoteResult> {
-            override fun onChanged(t: NoteResult?) {
-                if (t == null) return
-
-                when (t) {
-                    is NoteResult.Success<*> ->
-                        viewStateLiveData.value = NoteViewState(note = t.data as? Note)
-                    is NoteResult.Error ->
-                        viewStateLiveData.value = NoteViewState(error = t.error)
+        repository.getNoteById(id).observeForever(Observer { t ->
+            t?.let { noteResult ->
+                viewStateLiveData.value = when (noteResult) {
+                    is NoteResult.Success<*> -> NoteViewState(NoteViewState.Data(note = noteResult.data as? Note))
+                    is NoteResult.Error -> NoteViewState(error = noteResult.error)
                 }
             }
         })
+
+    fun deleteNote() {
+        currentNote?.let {
+            repository.deleteNote(it.id).observeForever { result ->
+                result?.let { noteResult ->
+                    viewStateLiveData.value = when (noteResult) {
+                        is NoteResult.Success<*> -> NoteViewState(NoteViewState.Data(isDeleted = true))
+                        is NoteResult.Error -> NoteViewState(error = noteResult.error)
+                    }
+                }
+            }
+        }
+
+    }
 }

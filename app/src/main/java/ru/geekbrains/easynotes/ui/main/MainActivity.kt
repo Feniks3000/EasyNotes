@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.main
 
 import android.content.Context
 import android.content.Intent
@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityMainBinding
 import ru.geekbrains.easynotes.model.Note
+import ru.geekbrains.easynotes.ui.LogoutDialog
+import ru.geekbrains.easynotes.ui.base.BaseActivity
+import ru.geekbrains.easynotes.ui.note.NoteActivity
+import ru.geekbrains.easynotes.ui.splash.SplashActivity
 import ru.geekbrains.easynotes.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
@@ -18,7 +22,7 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
     private val CLASS = "${MainActivity::class.java.simpleName}"
 
     override val ui: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    override val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    override val viewModel: MainViewModel by viewModel()
 
     lateinit var adapter: MainAdapter
 
@@ -38,9 +42,7 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
         })
         ui.recyclerNotes.adapter = adapter
 
-        ui.floatingAddNoteButton.setOnClickListener { view ->
-            openNoteScreen(null)
-        }
+        ui.floatingAddNoteButton.setOnClickListener { openNoteScreen(null) }
     }
 
     private fun openNoteScreen(note: Note?) =

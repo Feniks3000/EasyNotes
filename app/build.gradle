@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id "org.jetbrains.kotlin.plugin.parcelize"
+    id "kotlin-parcelize"
     id 'com.google.gms.google-services'
 }
 
@@ -53,4 +53,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'org.koin:koin-android:2.2.0'
+    implementation 'org.koin:koin-android-viewmodel:2.2.0'
 }

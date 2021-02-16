@@ -2,9 +2,7 @@ package ru.geekbrains.easynotes.model
 
 import java.util.*
 
-object Repository {
-
-    private val remoteDataProvider: RemoteDataProvider = FirebaseStoreProvider()
+class Repository(private val remoteDataProvider: RemoteDataProvider) {
 
     fun getNotes() = remoteDataProvider.subscribeToAllNotes()
 
@@ -12,7 +10,7 @@ object Repository {
 
     fun getNoteById(id: String) = remoteDataProvider.getNoteById(id)
 
-    fun getNewId() = UUID.randomUUID().toString()
-
     fun getCurrentUser() = remoteDataProvider.getCurrenUser()
+
+    fun deleteNote(id: String) = remoteDataProvider.deleteNote(id)
 }

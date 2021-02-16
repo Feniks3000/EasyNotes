@@ -1,4 +1,4 @@
-package ru.geekbrains.easynotes.ui
+package ru.geekbrains.easynotes.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ItemNoteBinding
 import ru.geekbrains.easynotes.model.Note
+import ru.geekbrains.easynotes.ui.getColorInt
 
 class MainAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<MainAdapter.NoteViewHolder>() {
@@ -34,8 +35,7 @@ class MainAdapter(private val onItemClickListener: OnItemClickListener) :
             note.run {
                 ui.title.text = title
                 ui.body.text = body
-                ui.body.setBackgroundResource(color.getColorInt())
-                itemView.setBackgroundColor(color.getColorInt())
+                ui.noteCard.setCardBackgroundColor(color.getColorInt(itemView.context))
             }
             itemView.setOnClickListener { onItemClickListener.onItemClick(note) }
         }

@@ -10,14 +10,16 @@ import ru.geekbrains.easynotes.exceptions.NoAuthException
 private const val NOTES_COLLECTION = "notes"
 private const val USERS_COLLECTION = "users"
 
-class FirebaseStoreProvider : RemoteDataProvider {
+class FirebaseStoreProvider(
+    private val db: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
+) : RemoteDataProvider {
     companion object {
         private val CLASS = "${FirebaseStoreProvider::class.java.simpleName}"
     }
 
-    private val db = FirebaseFirestore.getInstance()
     private val currentUser
-        get() = FirebaseAuth.getInstance().currentUser
+        get() = firebaseAuth.currentUser
 
     override fun subscribeToAllNotes(): LiveData<NoteResult> = MutableLiveData<NoteResult>().apply {
         try {
@@ -70,6 +72,19 @@ class FirebaseStoreProvider : RemoteDataProvider {
             User(it.displayName ?: "", it.email ?: "")
         }
     }
+
+    override fun deleteNote(id: String): LiveData<NoteResult> =
+        MutableLiveData<NoteResult>().apply {
+            try {
+                getUserNotes()
+                    .document(id)
+                    .delete()
+                    .addOnSuccessListener { value = NoteResult.Success(null) }
+                    .addOnFailureListener { throw it }
+            } catch (e: Throwable) {
+                value = NoteResult.Error(e)
+            }
+        }
 
     private fun getUserNotes() = currentUser?.let { firebaseUser ->
         db.collection(USERS_COLLECTION)
