@@ -17,9 +17,9 @@ import ru.geekbrains.easynotes.ui.note.NoteActivity
 import ru.geekbrains.easynotes.ui.splash.SplashActivity
 import ru.geekbrains.easynotes.viewmodel.MainViewModel
 
-class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
+class MainActivity : BaseActivity<List<Note>?>(), LogoutDialog.LogoutListener {
 
-    private val CLASS = "${MainActivity::class.java.simpleName}"
+    private val CLASS = MainActivity::class.java.simpleName
 
     override val ui: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override val viewModel: MainViewModel by viewModel()

@@ -1,39 +1,31 @@
 package ru.geekbrains.easynotes.viewmodel
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.Observer
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.NoteResult
 import ru.geekbrains.easynotes.model.Repository
-import ru.geekbrains.easynotes.ui.main.MainViewState
 
 class MainViewModel(repository: Repository) :
-    BaseViewModel<List<Note>?, MainViewState>() {
+    BaseViewModel<List<Note>?>() {
 
-    private val repositoryNotes = repository.getNotes()
+    private val notesChannel by lazy { runBlocking { repository.getNotes() } }
 
-    private val notesObserver = object : Observer<NoteResult> {
-        override fun onChanged(t: NoteResult?) {
-            t?.let {
-                when (t) {
-                    is NoteResult.Success<*> -> {
-                        viewStateLiveData.value = MainViewState(notes = t.data as? List<Note>)
-                    }
-                    is NoteResult.Error -> {
-                        viewStateLiveData.value = MainViewState(error = t.error)
-                    }
+    init {
+        launch {
+            notesChannel.consumeEach { result ->
+                when (result) {
+                    is NoteResult.Success<*> -> setData(result.data as? List<Note>)
+                    is NoteResult.Error -> setError(result.error)
                 }
             }
         }
     }
 
-    init {
-        viewStateLiveData.value = MainViewState()
-        repositoryNotes.observeForever(notesObserver)
-    }
-
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override fun onCleared() {
-        repositoryNotes.removeObserver(notesObserver)
+        notesChannel.cancel()
     }
 }

@@ -4,12 +4,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.geekbrains.easynotes.R
 import ru.geekbrains.easynotes.databinding.ActivityNoteBinding
@@ -23,7 +23,7 @@ import java.util.*
 
 private val SAVE_DELAY = 2000L
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<Data>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
@@ -129,18 +129,18 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     private fun triggerSaveNote() {
         if (ui.title.text == null || ui.body.text == null) return
 
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
-            override fun run() {
-                note = note?.copy(
-                    title = ui.title.text.toString(),
-                    body = ui.body.text.toString(),
-                    color = color,
-                    lastChanged = Date()
-                ) ?: createNewNote()
+        launch {
+            delay(SAVE_DELAY)
 
-                if (note != null) viewModel.saveChanges(note!!)
-            }
-        }, SAVE_DELAY)
+            note = note?.copy(
+                title = ui.title.text.toString(),
+                body = ui.body.text.toString(),
+                color = color,
+                lastChanged = Date()
+            ) ?: createNewNote()
+
+            note?.let { viewModel.saveChanges(it) }
+        }
     }
 
     private fun createNewNote(): Note =
@@ -150,7 +150,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
             ui.body.text.toString()
         )
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: Data) {
         if (data.isDeleted) finish()
 
         this.note = data.note

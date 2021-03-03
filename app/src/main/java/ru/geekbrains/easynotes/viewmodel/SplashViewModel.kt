@@ -1,18 +1,15 @@
 package ru.geekbrains.easynotes.viewmodel
 
+import kotlinx.coroutines.launch
 import ru.geekbrains.easynotes.exceptions.NoAuthException
 import ru.geekbrains.easynotes.model.Repository
-import ru.geekbrains.easynotes.ui.splash.SplashViewState
 
-class SplashViewModel(private val repository: Repository) :
-    BaseViewModel<Boolean?, SplashViewState>() {
+class SplashViewModel(private val repository: Repository) : BaseViewModel<Boolean>() {
 
     fun requestUser() {
-        repository.getCurrentUser().observeForever { user ->
-            viewStateLiveData.value = user?.let {
-                SplashViewState(isAuth = true)
-            } ?: SplashViewState(error = NoAuthException())
+        launch {
+            repository.getCurrentUser()?.let { setData(true) }
+                ?: setError(NoAuthException())
         }
     }
-
 }
