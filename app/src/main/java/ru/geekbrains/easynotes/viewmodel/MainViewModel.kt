@@ -1,5 +1,6 @@
 package ru.geekbrains.easynotes.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.Observer
 import ru.geekbrains.easynotes.model.Note
 import ru.geekbrains.easynotes.model.NoteResult
@@ -31,7 +32,8 @@ class MainViewModel(repository: Repository) :
         repositoryNotes.observeForever(notesObserver)
     }
 
-    override fun onCleared() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    public override fun onCleared() {
         repositoryNotes.removeObserver(notesObserver)
     }
 }

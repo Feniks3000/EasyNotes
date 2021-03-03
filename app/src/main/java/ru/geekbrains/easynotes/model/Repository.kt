@@ -1,7 +1,5 @@
 package ru.geekbrains.easynotes.model
 
-import java.util.*
-
 class Repository(private val remoteDataProvider: RemoteDataProvider) {
 
     fun getNotes() = remoteDataProvider.subscribeToAllNotes()

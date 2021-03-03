@@ -1,5 +1,6 @@
 package ru.geekbrains.easynotes.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.Observer
 import org.apache.commons.lang3.StringUtils
 import ru.geekbrains.easynotes.model.Note
@@ -17,7 +18,8 @@ class NoteViewModel(val repository: Repository) :
         viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
     }
 
-    override fun onCleared() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    public override fun onCleared() {
         currentNote?.let {
             if (StringUtils.isEmpty(it.title)) currentNote = it.copy(title = "New note")
             repository.saveNote(currentNote!!)
